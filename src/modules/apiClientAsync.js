@@ -9,7 +9,7 @@ export const getImages = async (search, page, per_page) => {
         safesearch: true
     });
 
-    const response = await fetch(`http://pixabay.com/api/?${params.toString()}`);
+    const response = await fetch(`https://pixabay.com/api/?${params.toString()}`);
     const imageCard = await response.json();
 
     return imageCard;
