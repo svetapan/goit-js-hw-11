@@ -1,37 +1,20 @@
-import { getImages } from './modules/apiClientAsync';
-import { renderImg } from './modules/renderingImagesAsync';
+import { getImages } from './apiClientAsync';
+import { renderImg } from './renderingImages';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import SimpleLightbox from "simplelightbox";
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const searchQuery = document.querySelector('input');
+const searchForm = document.querySelector('#search-form');
 const loadMoreBtn= document.querySelector('.load-more');
 const perPage = 40;
+
+searchForm.addEventListener('submit', onFindImage);
+loadMoreBtn.addEventListener('click', onloadMoreBtnlick);
 
 let searchState ='';
 let pageState = 1;
 let totalHit = 0;
-const searchForm = document.querySelector('#search-form');
-const headerHeight = searchForm.clientHeight;
-let topIndent = 0;
-
-searchForm.addEventListener('submit', onFindImage);
-loadMoreBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    onloadMoreBtnlick();
-
-    topIndent = e.target.offsetTop - headerHeight - 10;
-    scrollToNext(topIndent)
-});
-
-function scrollToNext(topIndent) {
-    setTimeout(()=>{
-        window.scroll({
-            top: topIndent,
-            behavior: "smooth",
-        });
-    },100)
-}
 
 const fetchImg = async (search, page) => {
     try {
@@ -89,16 +72,3 @@ async function onloadMoreBtnlick() {
          Notify.failure(error);
     }
 }
-
-window.addEventListener('scroll', () => {
-    const {
-        scrollTop,
-        scrollHeight,
-        clientHeight
-    } = document.documentElement;
-
-    if (scrollTop + clientHeight >= scrollHeight - 5 && totalHit/perPage >= pageState) {
-        pageState ++;
-        onloadMoreBtnlick();
-    }
-});
