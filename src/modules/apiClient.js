@@ -11,7 +11,7 @@ export const getImages = (search, page, per_page) => {
         safesearch: true
     });
 
-    return fetch(`http://pixabay.com/api/?${params.toString()}`)
+    return fetch(`https://pixabay.com/api/?${params.toString()}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(response.status);
