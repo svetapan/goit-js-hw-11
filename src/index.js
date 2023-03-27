@@ -11,9 +11,10 @@ const perPage = 40;
 let searchState ='';
 let pageState = 1;
 let totalHit = 0;
+let topIndent = 0;
+
 const searchForm = document.querySelector('#search-form');
 const headerHeight = searchForm.clientHeight;
-let topIndent = 0;
 
 searchForm.addEventListener('submit', onFindImage);
 loadMoreBtn.addEventListener('click', (e) => {
@@ -33,7 +34,7 @@ function scrollToNext(topIndent) {
     },100)
 }
 
-const fetchImg = async (search, page) => {
+const getImg = async (search, page) => {
     try {
         const response = await getImages(search, page, perPage);
         totalHit = response.totalHits;
@@ -54,7 +55,7 @@ async function onFindImage(evt) {
         clearImages();
 
         try {
-            await fetchImg(searchValue, pageState);
+            await getImg(searchValue, pageState);
             Notify.info(`Hooray! We found ${totalHit} images.`);
             await new SimpleLightbox('.gallery a');
         } catch (error) {
@@ -83,7 +84,7 @@ async function onloadMoreBtnlick() {
     const search = searchQuery.value;
     
     try {
-        await fetchImg(search, page);
+        await getImg(search, page);
         new SimpleLightbox('.gallery a');
     } catch (error) {
          Notify.failure(error);
